@@ -1,8 +1,16 @@
 #!/bin/bash
 
 # Git kullanıcı kimlik bilgilerini tanımlayın
-email=$GIT_EMAIL
+username=$GIT_USERNAME
 password=$GIT_PASSWORD
+
+# Değişkenlerin doğru yüklendiğini kontrol et
+if [ -z "username" ] || [ -z "$password" ]; then
+    echo "GIT_USERNAME veya GIT_PASSWORD tanımlı değil!"
+    exit 1
+fi
+
+echo "Git username: username"
 
 
 # Nginx kurulumu
@@ -70,10 +78,8 @@ git config --global http.postBuffer 524288000
 git config --global http.maxRequestBuffer 100M
 
 # Remote repository ekleme ve ana şubeyi çekme
-git remote add origin https://$email:$password@github.com/ekiptecom/sehirapp.git
+git remote add origin https://$username:$password@github.com/ekiptecom/sehirapp.git
 git fetch origin
-
-echo "https://$email:$password@github.com/ekiptecom/sehirapp.git" | git credential-store --file ~/.git-credentials store
 git checkout main
 
 npm install
