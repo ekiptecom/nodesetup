@@ -34,7 +34,13 @@ EOL
 # Sites-enabled klasörüne sembolik link oluştur
 ln -s "$nginx_sites_available" "$nginx_sites_enabled"
 
-nginx -t
+if nginx -t; then
+  systemctl reload nginx
+else
+  echo "Nginx yapılandırma testi başarısız oldu!"
+  exit 1
+fi
+
 
 # Nginx'i yeniden yükle
 systemctl reload nginx
@@ -42,7 +48,9 @@ echo "Nginx yapılandırması başarıyla oluşturuldu ve yeniden yüklendi."
 
 # NVM kurulumu
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-source ~/.bashrc
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Node.js 17.3.0 kurulumu ve varsayılan olarak ayarlanması
 nvm install v17.3.0
